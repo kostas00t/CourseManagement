@@ -1,0 +1,163 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+<script th:inline="javascript" > 
+	/*<![CDATA[*/
+	var x = /*[[${weight}]]*/
+    function promptForWeight() {  
+		var weight = prompt ("Enter Weight for Exam, e.g. 0.7 for 70%", x);  
+		console.log(weight);
+	} 
+	/*]]>*/
+</script>  
+
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+  }
+</style>
+
+	<title>Students Directory</title>
+</head>
+
+<body>
+
+
+<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+  <!-- Brand -->
+  <a class="navbar-brand" href="#">Courses Management System</a>
+
+  <!-- Toggler/collapsibe Button -->
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!-- Navbar links -->
+  <div class="collapse navbar-collapse" id="collapsibleNavbar">
+    <ul class="navbar-nav ml-auto">
+      	<li class="nav-item">
+        	<a class="nav-link" th:href="@{/courses/courses}">My Courses</a>
+      	</li>
+      
+    	<li class="btn-nav navbar-nav">
+       		<a class="nav-link" th:href="@{/logout}">Log out</a>
+    	</li>
+    	</ul>
+  </div>
+</nav>
+
+<div class="table-responsive">
+
+	<hr>
+	
+	<!-- Add a button -->
+	<a th:href="@{/courses/AddStudentForm}"
+		class="btn btn-dark btn-sm mb-3">
+		Add Student
+	</a>
+	
+	<a th:href="@{/courses/CalculateFinalGrades}"
+		class="btn btn-outline-success btn-sm mb-3" >
+		Calculate Final Grades
+		<!-- onclick = "promptForWeight();" >   -->
+		<!--  th:onclick="${'promptForWeight()'}"> --> 
+	</a>
+		
+	<a th:href="@{/courses/ShowStatsForCourseAlt}"
+		class="btn btn-outline-secondary btn-sm mb-3">
+		Show Statistics
+	</a>
+	
+	<a th:href="@{/courses/courses}"
+		class="btn btn-link btn-sm mb-3" 
+		style="float: right;">
+		Back to Courses
+	</a>
+
+	<table class="table table-striped table-hover mx-auto w-full">
+		<thead class="thead-dark">
+			<tr>
+				<th> Student ID </th>
+				<th> Name </th>
+				<th> Year of Reg </th>
+				<th> Project Grade </th>
+				<th> Exam Grade </th>
+				<!--<th> Semester </th>-->
+				<!--<th> Instructor </th>-->
+				<th> Actions </th>
+			</tr>
+		</thead>
+		
+		<tbody>
+			<tr th:each="tempStudent : ${studentreg}">
+			
+				<td th:text="${tempStudent.studentID}" />	
+				<td th:text="${tempStudent.name}" />	
+				<td th:text="${tempStudent.yearofregistration}" />	
+				<td th:text="${tempStudent.projectgrade}" />
+				<td th:text="${tempStudent.examgrade}" />
+
+				<!-- <td th:text="${tempCourse.semester}" /> -->
+				<!-- <td th:text="${tempCourse.description}" />	-->
+				
+				<td>
+			
+			
+					<!-- Add "update grade" button/link -->
+					<a th:href="@{/courses/UpdateGradeForm(studentId=${tempStudent.studentID})}"
+					   class="btn btn-info btn-sm">
+						Update Grades
+					</a>
+					
+					<!-- Add "update student" button/link -->
+					<a th:href="@{/courses/UpdateStudentForm(studentId=${tempStudent.studentID})}"
+					   class="btn btn-info btn-sm">
+						Update Student
+					</a>
+					
+					<!-- Add "delete" button/link -->					
+					<a th:href="@{/courses/DeleteStudent(studentId=${tempStudent.studentID})}"
+					   class="btn btn-danger btn-sm"
+					   onclick="if (!(confirm('Are you sure you want to delete this student?'))) return false">
+						Delete Student
+					</a>
+					
+					
+					
+				</td>
+				
+				
+			</tr>
+		</tbody>		
+	</table>
+	
+</div>
+	
+	
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+<script>
+    $('#exampleModal').on('show.bs.modal', function () {
+        var name = prompt("Please enter exam weight", 0,7);
+        $.get("/courses/modal?weight=" + name, function (data) {
+            $('#exampleModal').find('.modal-body').html(data);
+        })
+    })
+</script>
+</body>
+</html>
+
+
+
